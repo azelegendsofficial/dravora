@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dravora Music - Tidak Tersedia</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+        
+        :root {
+            --primary-red: #dc2626;
+            --light-red: #ef4444;
+            --accent-red: #f87171;
+            --dark-bg: #0f0a1e;
+            --darker-bg: #050208;
+            --pure-white: #ffffff;
+            --text-light: #94a3b8;
+            --glow-red: rgba(239, 68, 68, 0.5);
+            --gradient-primary: linear-gradient(135deg, var(--primary-red) 0%, var(--light-red) 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--dark-bg);
+            color: var(--pure-white);
+            overflow-x: hidden;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(220, 38, 38, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(239, 68, 68, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 60%, rgba(248, 113, 113, 0.08) 0%, transparent 50%),
+                linear-gradient(135deg, var(--dark-bg) 0%, var(--darker-bg) 100%);
+        }
+
+        .floating-orbs {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            filter: blur(40px);
+            animation: float 15s infinite ease-in-out;
+            opacity: 0.3;
+        }
+
+        .orb:nth-child(1) {
+            width: 300px;
+            height: 300px;
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .orb:nth-child(2) {
+            width: 200px;
+            height: 200px;
+            top: 60%;
+            right: 15%;
+            animation-delay: -5s;
+        }
+
+        .orb:nth-child(3) {
+            width: 150px;
+            height: 150px;
+            top: 80%;
+            left: 60%;
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-30px) rotate(120deg); }
+            66% { transform: translateY(20px) rotate(240deg); }
+        }
+
+        /* VM Splash Screen */
+        #vm-splash {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            transition: opacity 0.8s ease;
+        }
+
+        #vm-splash.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .vm-content {
+            text-align: center;
+        }
+
+        .vm-icon {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #8b5cf6, #a78bfa);
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            animation: pulse 2s ease-in-out infinite;
+            box-shadow: 0 0 40px rgba(139, 92, 246, 0.5);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .vm-text {
+            color: #fff;
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+        }
+
+        .vm-subtext {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 18px;
+            margin-bottom: 40px;
+        }
+
+        .vm-progress {
+            width: 300px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 0 auto;
+        }
+
+        .vm-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #8b5cf6, #a78bfa);
+            border-radius: 10px;
+            animation: loading 3s ease-in-out;
+        }
+
+        @keyframes loading {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+
+        /* Restriction Screen */
+        #restriction-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1e0a0a 0%, #2d1414 100%);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            animation: fadeIn 0.8s ease;
+        }
+
+        #restriction-screen.active {
+            display: flex;
+        }
+
+        .restriction-content {
+            text-align: center;
+            max-width: 700px;
+            padding: 3rem;
+        }
+
+        .restriction-icon {
+            width: 150px;
+            height: 150px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 2rem;
+            animation: errorPulse 2s ease-in-out infinite;
+            box-shadow: 0 0 60px var(--glow-red);
+        }
+
+        @keyframes errorPulse {
+            0%, 100% { 
+                transform: scale(1);
+                box-shadow: 0 0 60px var(--glow-red);
+            }
+            50% { 
+                transform: scale(1.05);
+                box-shadow: 0 0 80px var(--glow-red), 0 0 100px rgba(239, 68, 68, 0.3);
+            }
+        }
+
+        .restriction-title {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--pure-white) 0%, var(--accent-red) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.02em;
+            animation: slideUp 0.8s ease-out;
+        }
+
+        .restriction-message {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            animation: slideUp 0.8s ease-out 0.2s both;
+        }
+
+        .country-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: rgba(239, 68, 68, 0.2);
+            border: 2px solid rgba(239, 68, 68, 0.4);
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 3rem;
+            animation: slideUp 0.8s ease-out 0.4s both;
+            box-shadow: 0 10px 30px rgba(239, 68, 68, 0.3);
+        }
+
+        .restriction-info {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            text-align: left;
+            animation: slideUp 0.8s ease-out 0.6s both;
+        }
+
+        .restriction-info h3 {
+            color: var(--accent-red);
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .restriction-info ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .restriction-info li {
+            color: rgba(255, 255, 255, 0.7);
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.05rem;
+        }
+
+        .restriction-info li:last-child {
+            border-bottom: none;
+        }
+
+        .contact-section {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            padding: 2rem;
+            border-radius: 20px;
+            animation: slideUp 0.8s ease-out 0.8s both;
+        }
+
+        .contact-section h3 {
+            color: var(--pure-white);
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+
+        .contact-section p {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        .contact-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1.25rem 3rem;
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+            box-shadow: 0 10px 30px rgba(239, 68, 68, 0.4);
+        }
+
+        .contact-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(239, 68, 68, 0.6);
+        }
+
+        .back-home-link {
+            display: inline-block;
+            color: var(--text-light);
+            text-decoration: none;
+            margin-top: 2rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            animation: slideUp 0.8s ease-out 1s both;
+        }
+
+        .back-home-link:hover {
+            color: var(--pure-white);
+            transform: translateX(-5px);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Glitch Effect */
+        .glitch {
+            animation: glitch 3s infinite;
+        }
+
+        @keyframes glitch {
+            0%, 90%, 100% {
+                text-shadow: none;
+            }
+            92% {
+                text-shadow: 
+                    -2px 0 red,
+                    2px 0 blue;
+            }
+            94% {
+                text-shadow: 
+                    2px 0 red,
+                    -2px 0 blue;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .restriction-content {
+                padding: 2rem 1.5rem;
+            }
+
+            .restriction-icon {
+                width: 120px;
+                height: 120px;
+            }
+
+            .restriction-title {
+                font-size: 2rem;
+            }
+
+            .restriction-message {
+                font-size: 1.1rem;
+            }
+
+            .country-badge {
+                font-size: 1rem;
+                padding: 0.75rem 1.5rem;
+            }
+
+            .restriction-info {
+                padding: 1.5rem;
+            }
+
+            .restriction-info h3 {
+                font-size: 1.1rem;
+            }
+
+            .restriction-info li {
+                font-size: 0.95rem;
+            }
+
+            .contact-btn {
+                padding: 1rem 2rem;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="animated-bg"></div>
+    <div class="floating-orbs">
+        <div class="orb"></div>
+        <div class="orb"></div>
+        <div class="orb"></div>
+    </div>
+
+    <!-- Restriction Screen -->
+    <div id="restriction-screen">
+        <div class="restriction-content">
+            <div class="restriction-icon">
+                <svg width="80" height="80" viewBox="0 0 24 24" fill="white">
+                    <circle cx="12" cy="12" r="10" stroke="white" stroke-width="2" fill="none"/>
+                    <path d="M4.93 4.93l14.14 14.14" stroke="white" stroke-width="3" stroke-linecap="round"/>
+                </svg>
+            </div>
+
+            <h1 class="restriction-title glitch">Akses Ditolak</h1>
+            
+            <p class="restriction-message">
+                Maaf, <strong>Dravora Music</strong> tidak tersedia di negara Anda saat ini karena pembatasan lisensi konten musik dan kebijakan regional.
+            </p>
+
+            <div class="country-badge">
+                🌍 Negara Anda: <strong>Indonesia</strong>
+            </div>
+
+            <div class="restriction-info">
+                <h3>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                        <path d="M12 8v4M12 16h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    Alasan Pembatasan:
+                </h3>
+                <ul>
+                    <li>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                            <path d="M9 12l2 2 4-4" stroke="#ef4444" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        Lisensi musik belum tersedia untuk wilayah Indonesia
+                    </li>
+                    <li>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                            <path d="M9 12l2 2 4-4" stroke="#ef4444" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        Pembatasan hak cipta dan distribusi konten regional
+                    </li>
+                    <li>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                            <path d="M9 12l2 2 4-4" stroke="#ef4444" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        Kebijakan layanan streaming musik internasional
+                    </li>
+                    <li>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                            <path d="M9 12l2 2 4-4" stroke="#ef4444" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        Peraturan konten digital lokal yang belum terpenuhi
+                    </li>
+                </ul>
+            </div>
+
+            <div class="contact-section">
+                <h3>💡 Ingin Akses Lebih Awal?</h3>
+                <p>
+                    Kami sedang bekerja keras untuk membawa Dravora Music ke Indonesia! 
+                    Daftarkan email Anda untuk mendapat notifikasi saat layanan tersedia di negara Anda.
+                </p>
+                <a href="https://spacestore.dpdns.org" class="contact-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                    </svg>
+                    Hubungi Space Store
+                </a>
+            </div>
+
+            <a href="https://brianofficial.dpdns.org" class="back-home-link">
+                ← Kembali ke Brian Official
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Simulate VM loading and geo-detection
+        window.addEventListener('load', function() {
+            // Show VM splash for 3 seconds
+            setTimeout(() => {
+                document.getElementById('vm-splash').classList.add('hidden');
+                
+                // After VM splash, show restriction screen
+                setTimeout(() => {
+                    document.getElementById('restriction-screen').classList.add('active');
+                }, 500);
+            }, 3000);
+        });
+
+        // Parallax effect
+        document.addEventListener('mousemove', function(e) {
+            const orbs = document.querySelectorAll('.orb');
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            
+            orbs.forEach((orb, index) => {
+                const speed = (index + 1) * 15;
+                const xMove = (x - 0.5) * speed;
+                const yMove = (y - 0.5) * speed;
+                orb.style.transform = `translate(${xMove}px, ${yMove}px)`;
+            });
+        });
+
+        // Add random glitch effect to icon
+        setInterval(() => {
+            const icon = document.querySelector('.restriction-icon');
+            icon.style.animation = 'none';
+            setTimeout(() => {
+                icon.style.animation = 'errorPulse 2s ease-in-out infinite';
+            }, 10);
+        }, 5000);
+    </script>
+</body>
+</html>
